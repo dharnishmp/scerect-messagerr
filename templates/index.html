@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security & Privacy Encoder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>🔐 Secret Message Encoder/Decoder</h1>
+
+    <textarea id="message" placeholder="Enter your message..."></textarea>
+
+    <div class="buttons">
+        <button onclick="encode()">Encode</button>
+        <button onclick="decode()">Decode</button>
+    </div>
+
+    <h3>Result:</h3>
+    <div id="result"></div>
+</div>
+
+<script>
+function encode() {
+    sendData("encode");
+}
+
+function decode() {
+    sendData("decode");
+}
+
+function sendData(action) {
+    let message = document.getElementById("message").value;
+
+    fetch("/process", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: message,
+            action: action
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("result").innerText = data.result;
+    });
+}
+</script>
+
+</body>
+</html>
